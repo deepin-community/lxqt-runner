@@ -1,3 +1,9 @@
+lxqt-runner (0.16.0-1deepin0) unstable; urgency=medium
+
+  * No source change upload against GCC 12.
+
+ -- Tianyu Chen <sweetyfish@deepin.org>  Fri, 20 Sep 2024 12:12:59 +0800
+
 lxqt-runner (0.16.0-1) unstable; urgency=medium
 
   [ Alf Gaida ]
