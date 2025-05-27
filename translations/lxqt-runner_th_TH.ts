@@ -49,7 +49,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../configuredialog/configuredialog.ui" line="90"/>
+        <location filename="../configuredialog/configuredialog.ui" line="80"/>
+        <source>Clear input on launching</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configuredialog/configuredialog.ui" line="97"/>
         <source>Shortcut:</source>
         <translation>ปุ่มลัด:</translation>
     </message>
@@ -61,7 +66,7 @@
     <message>
         <location filename="../configuredialog/configuredialog.cpp" line="62"/>
         <source>Center of the screen</source>
-        <translation type="unfinished"></translation>
+        <translation>กลางหน้าจอ</translation>
     </message>
     <message>
         <location filename="../configuredialog/configuredialog.cpp" line="67"/>
@@ -94,10 +99,10 @@
     <message>
         <location filename="../dialog.cpp" line="109"/>
         <source>Clear History</source>
-        <translation type="unfinished"></translation>
+        <translation>ล้างประวัติ</translation>
     </message>
     <message>
-        <location filename="../dialog.cpp" line="370"/>
+        <location filename="../dialog.cpp" line="408"/>
         <source>Show/hide runner dialog</source>
         <translation type="unfinished"></translation>
     </message>
@@ -110,9 +115,9 @@
         <translation>ประวัติ</translation>
     </message>
     <message>
-        <location filename="../providers.cpp" line="845"/>
-        <source>Mathematics</source>
-        <translation>การคำนวณเลข</translation>
+        <location filename="../providers.cpp" line="846"/>
+        <source>Copy calculation result to clipboard</source>
+        <translation>ลอกผลคำนวณใส่คลิปบอร์ด</translation>
     </message>
 </context>
 </TS>

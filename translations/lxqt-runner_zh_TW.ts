@@ -49,7 +49,12 @@
         <translation> 物件</translation>
     </message>
     <message>
-        <location filename="../configuredialog/configuredialog.ui" line="90"/>
+        <location filename="../configuredialog/configuredialog.ui" line="80"/>
+        <source>Clear input on launching</source>
+        <translation>啟動時清空輸入框</translation>
+    </message>
+    <message>
+        <location filename="../configuredialog/configuredialog.ui" line="97"/>
         <source>Shortcut:</source>
         <translation>快捷鍵：</translation>
     </message>
@@ -97,7 +102,7 @@
         <translation>清除歷史紀錄</translation>
     </message>
     <message>
-        <location filename="../dialog.cpp" line="370"/>
+        <location filename="../dialog.cpp" line="408"/>
         <source>Show/hide runner dialog</source>
         <translation>顯示/隱藏啟動器對話框</translation>
     </message>
@@ -110,9 +115,9 @@
         <translation>歷史記錄</translation>
     </message>
     <message>
-        <location filename="../providers.cpp" line="845"/>
-        <source>Mathematics</source>
-        <translation>數學</translation>
+        <location filename="../providers.cpp" line="846"/>
+        <source>Copy calculation result to clipboard</source>
+        <translation>複製計算結果到剪貼簿</translation>
     </message>
 </context>
 </TS>

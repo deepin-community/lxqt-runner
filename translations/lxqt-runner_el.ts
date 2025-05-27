@@ -49,7 +49,12 @@
         <translation> αντικείμενο(α)</translation>
     </message>
     <message>
-        <location filename="../configuredialog/configuredialog.ui" line="90"/>
+        <location filename="../configuredialog/configuredialog.ui" line="80"/>
+        <source>Clear input on launching</source>
+        <translation>Εκκαθάριση της καταχώρησης κατά την εκκίνηση</translation>
+    </message>
+    <message>
+        <location filename="../configuredialog/configuredialog.ui" line="97"/>
         <source>Shortcut:</source>
         <translation>Συντόμευση:</translation>
     </message>
@@ -97,7 +102,7 @@
         <translation>Εκκαθάριση του ιστορικού</translation>
     </message>
     <message>
-        <location filename="../dialog.cpp" line="370"/>
+        <location filename="../dialog.cpp" line="408"/>
         <source>Show/hide runner dialog</source>
         <translation>Εμφάνιση/απόκρυψη του διαλόγου του εκτελεστή</translation>
     </message>
@@ -110,9 +115,9 @@
         <translation>Ιστορικό</translation>
     </message>
     <message>
-        <location filename="../providers.cpp" line="845"/>
-        <source>Mathematics</source>
-        <translation>Μαθηματικά</translation>
+        <location filename="../providers.cpp" line="846"/>
+        <source>Copy calculation result to clipboard</source>
+        <translation>Αντιγραφή του αποτελέσματος υπολογισμού στο πρόχειρο</translation>
     </message>
 </context>
 </TS>

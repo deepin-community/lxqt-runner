@@ -49,7 +49,12 @@
         <translation> من العناصر</translation>
     </message>
     <message>
-        <location filename="../configuredialog/configuredialog.ui" line="90"/>
+        <location filename="../configuredialog/configuredialog.ui" line="80"/>
+        <source>Clear input on launching</source>
+        <translation>امسح المدخل عند الإطلاق</translation>
+    </message>
+    <message>
+        <location filename="../configuredialog/configuredialog.ui" line="97"/>
         <source>Shortcut:</source>
         <translation>الاختصار:</translation>
     </message>
@@ -97,7 +102,7 @@
         <translation>امسح التأريخ</translation>
     </message>
     <message>
-        <location filename="../dialog.cpp" line="370"/>
+        <location filename="../dialog.cpp" line="408"/>
         <source>Show/hide runner dialog</source>
         <translation>اعرض/أخفِ حواريّ المُطلق</translation>
     </message>
@@ -110,9 +115,9 @@
         <translation>التأريخ</translation>
     </message>
     <message>
-        <location filename="../providers.cpp" line="845"/>
-        <source>Mathematics</source>
-        <translation>الرياضيات</translation>
+        <location filename="../providers.cpp" line="846"/>
+        <source>Copy calculation result to clipboard</source>
+        <translation>نسخ نتيجة الحساب إلى الحافظة</translation>
     </message>
 </context>
 </TS>

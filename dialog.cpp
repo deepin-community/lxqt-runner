@@ -74,19 +74,19 @@ Dialog::Dialog(QWidget *parent) :
     setWindowTitle(QSL("LXQt Runner"));
     setAttribute(Qt::WA_TranslucentBackground);
 
-    connect(LXQt::Settings::globalSettings(), SIGNAL(iconThemeChanged()), this, SLOT(update()));
-    connect(ui->closeButton, SIGNAL(clicked()), this, SLOT(hide()));
-    connect(mSettings, SIGNAL(settingsChanged()), this, SLOT(applySettings()));
+    connect(LXQt::Settings::globalSettings(), &LXQt::GlobalSettings::iconThemeChanged, this, qOverload<>(&Dialog::update));
+    connect(ui->closeButton, &QToolButton::clicked, this, &Dialog::hide);
+    connect(mSettings, &LXQt::Settings::settingsChanged, this, &Dialog::applySettings);
 
     mSearchTimer.setSingleShot(true);
     connect(&mSearchTimer, &QTimer::timeout, ui->commandEd, [this] {
         setFilter(ui->commandEd->text());
     });
-    mSearchTimer.setInterval(350); // typing speed (not very fast)
+    mSearchTimer.setInterval(250); // typing speed (not very fast)
 
     ui->commandEd->installEventFilter(this);
 
-    connect(ui->commandEd, &QLineEdit::textChanged, [this] (QString const &) {
+    connect(ui->commandEd, &QLineEdit::textChanged, this, [this] (QString const &) {
         mSearchTimer.start();
     });
     connect(ui->commandEd, &QLineEdit::returnPressed, this, &Dialog::runCommand);
@@ -95,7 +95,7 @@ Dialog::Dialog(QWidget *parent) :
     ui->commandList->installEventFilter(this);
     ui->commandList->setModel(mCommandItemModel);
     ui->commandList->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    connect(ui->commandList, SIGNAL(clicked(QModelIndex)), this, SLOT(runCommand()));
+    connect(ui->commandList, &MyListView::clicked, this, &Dialog::runCommand);
     setFilter(QString());
     dataChanged();
 
@@ -133,8 +133,6 @@ Dialog::Dialog(QWidget *parent) :
 
     connect(mGlobalShortcut, &GlobalKeyShortcut::Action::activated, this, &Dialog::showHide);
     connect(mGlobalShortcut, &GlobalKeyShortcut::Action::shortcutChanged, this, &Dialog::shortcutChanged);
-    connect(KWindowSystem::self(), &KWindowSystem::activeWindowChanged, this, &Dialog::onActiveWindowChanged);
-    connect(KWindowSystem::self(), &KWindowSystem::currentDesktopChanged, this, &Dialog::onCurrentDesktopChanged);
 
     resize(mSettings->value(QL1S("dialog/width"), 400).toInt(), size().height());
 
@@ -176,9 +174,46 @@ QSize Dialog::sizeHint() const
 /************************************************
 
  ************************************************/
-void Dialog::resizeEvent(QResizeEvent * /*event*/)
+void Dialog::resizeEvent(QResizeEvent *event)
 {
-    mSettings->setValue(QL1S("dialog/width"), size().width());
+    if (event->spontaneous())
+        mSettings->setValue(QL1S("dialog/width"), size().width());
+}
+
+
+/************************************************
+
+ ************************************************/
+void Dialog::moveEvent(QMoveEvent *event)
+{
+    // Note: For some reason the dialog gets repositioned by "outer world" (VM?) to
+    // wrong position (0,0). The root cause of this move is yet unknown and
+    // this is a workaround to avoid wong position of the window.
+    if (event->spontaneous())
+        QTimer::singleShot(0, this, &Dialog::realign);
+    return QDialog::moveEvent(event);
+}
+
+
+/************************************************
+
+ ************************************************/
+void Dialog::showEvent(QShowEvent *event)
+{
+    connect(KWindowSystem::self(), &KWindowSystem::activeWindowChanged, this, &Dialog::onActiveWindowChanged);
+    connect(KWindowSystem::self(), &KWindowSystem::currentDesktopChanged, this, &Dialog::onCurrentDesktopChanged);
+    return QDialog::showEvent(event);
+}
+
+
+/************************************************
+
+ ************************************************/
+void Dialog::hideEvent(QHideEvent *event)
+{
+    QDialog::hideEvent(event);
+    disconnect(KWindowSystem::self(), &KWindowSystem::currentDesktopChanged, this, &Dialog::onCurrentDesktopChanged);
+    disconnect(KWindowSystem::self(), &KWindowSystem::activeWindowChanged, this, &Dialog::onActiveWindowChanged);
 }
 
 
@@ -229,6 +264,7 @@ bool Dialog::editKeyPressEvent(QKeyEvent *event)
 
     case Qt::Key_Up:
     case Qt::Key_PageUp:
+    case Qt::Key_Home:
         if (ui->commandEd->text().isEmpty() &&
             ui->commandList->isVisible() &&
             ui->commandList->currentIndex().row() == 0
@@ -242,6 +278,7 @@ bool Dialog::editKeyPressEvent(QKeyEvent *event)
 
     case Qt::Key_Down:
     case Qt::Key_PageDown:
+    case Qt::Key_End:
         if (ui->commandEd->text().isEmpty() &&
             ui->commandList->isHidden()
            )
@@ -321,6 +358,7 @@ void Dialog::showHide()
         show();
         KWindowSystem::forceActiveWindow(winId());
         ui->commandEd->setFocus();
+        ui->commandEd->selectAll();
     }
 }
 
@@ -373,13 +411,14 @@ void Dialog::applySettings()
 
     mShowOnTop = mSettings->value(QL1S("dialog/show_on_top"), true).toBool();
 
+    mClearOnRunning = mSettings->value(QL1S("dialog/clear_on_running"), true).toBool();
+
     mMonitor = mSettings->value(QL1S("dialog/monitor"), -1).toInt();
 
     mCommandItemModel->setUseHistory(mSettings->value(QL1S("dialog/history_use"), true).toBool());
     mCommandItemModel->showHistoryFirst(mSettings->value(QL1S("dialog/history_first"), true).toBool());
     ui->commandList->setShownCount(mSettings->value(QL1S("dialog/list_shown_items"), 4).toInt());
 
-    realign();
     mSettings->sync();
 }
 
@@ -464,7 +503,10 @@ void Dialog::dataChanged()
 {
     if (mCommandItemModel->rowCount())
     {
-       ui->commandList->setCurrentIndex(mCommandItemModel->appropriateItem(mCommandItemModel->command()));
+        // set the current item if not existing
+        if(!ui->commandList->currentIndex().isValid())
+            ui->commandList->setCurrentIndex(mCommandItemModel->appropriateItem(mCommandItemModel->command()));
+        // show the list if it's hidden and scroll to the current item
         ui->commandList->scrollTo(ui->commandList->currentIndex());
         ui->commandList->show();
     }
@@ -492,7 +534,11 @@ void Dialog::runCommand()
     if (res)
     {
         hide();
-        ui->commandEd->clear();
+        if (mClearOnRunning
+            && !qobject_cast<const MathItem*>(command)) // don't clear math results
+        {
+            ui->commandEd->clear();
+        }
     }
 
 }

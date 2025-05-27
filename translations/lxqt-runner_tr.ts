@@ -49,7 +49,12 @@
         <translation> öge(ler)</translation>
     </message>
     <message>
-        <location filename="../configuredialog/configuredialog.ui" line="90"/>
+        <location filename="../configuredialog/configuredialog.ui" line="80"/>
+        <source>Clear input on launching</source>
+        <translation>Başlangıçta girişi temizle</translation>
+    </message>
+    <message>
+        <location filename="../configuredialog/configuredialog.ui" line="97"/>
         <source>Shortcut:</source>
         <translation>Kısayol:</translation>
     </message>
@@ -97,7 +102,7 @@
         <translation>Geçmişi Temizle</translation>
     </message>
     <message>
-        <location filename="../dialog.cpp" line="370"/>
+        <location filename="../dialog.cpp" line="408"/>
         <source>Show/hide runner dialog</source>
         <translation>Çalıştırıcı penceresini göster/gizle</translation>
     </message>
@@ -110,9 +115,9 @@
         <translation>Geçmiş</translation>
     </message>
     <message>
-        <location filename="../providers.cpp" line="845"/>
-        <source>Mathematics</source>
-        <translation>İşlemler</translation>
+        <location filename="../providers.cpp" line="846"/>
+        <source>Copy calculation result to clipboard</source>
+        <translation>Hesaplama sonucunu panoya kopyala</translation>
     </message>
 </context>
 </TS>

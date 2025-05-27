@@ -49,7 +49,12 @@
         <translation> elemento(s)</translation>
     </message>
     <message>
-        <location filename="../configuredialog/configuredialog.ui" line="90"/>
+        <location filename="../configuredialog/configuredialog.ui" line="80"/>
+        <source>Clear input on launching</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configuredialog/configuredialog.ui" line="97"/>
         <source>Shortcut:</source>
         <translation>Atallo:</translation>
     </message>
@@ -97,7 +102,7 @@
         <translation>Limpar o historial</translation>
     </message>
     <message>
-        <location filename="../dialog.cpp" line="370"/>
+        <location filename="../dialog.cpp" line="408"/>
         <source>Show/hide runner dialog</source>
         <translation>Amosar/agochar o diálogo do lanzador de aplicacións</translation>
     </message>
@@ -110,9 +115,9 @@
         <translation>Historial</translation>
     </message>
     <message>
-        <location filename="../providers.cpp" line="845"/>
-        <source>Mathematics</source>
-        <translation>Matemáticas</translation>
+        <location filename="../providers.cpp" line="846"/>
+        <source>Copy calculation result to clipboard</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

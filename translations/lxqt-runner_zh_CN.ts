@@ -36,7 +36,7 @@
     <message>
         <location filename="../configuredialog/configuredialog.ui" line="60"/>
         <source>&lt;b&gt;Note&lt;/b&gt;: The size of top-level widgets are constrained to 2/3 of the desktop&apos;s height and width.</source>
-        <translation></translation>
+        <translation>&lt;b&gt;注意&lt;/b&gt;: 顶层小工具的大小限制在桌面长和宽的 2/3 。</translation>
     </message>
     <message>
         <location filename="../configuredialog/configuredialog.ui" line="63"/>
@@ -49,7 +49,12 @@
         <translation> 个项目</translation>
     </message>
     <message>
-        <location filename="../configuredialog/configuredialog.ui" line="90"/>
+        <location filename="../configuredialog/configuredialog.ui" line="80"/>
+        <source>Clear input on launching</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configuredialog/configuredialog.ui" line="97"/>
         <source>Shortcut:</source>
         <translation>快捷键:</translation>
     </message>
@@ -97,7 +102,7 @@
         <translation>清除历史</translation>
     </message>
     <message>
-        <location filename="../dialog.cpp" line="370"/>
+        <location filename="../dialog.cpp" line="408"/>
         <source>Show/hide runner dialog</source>
         <translation>显示/隐藏对话框</translation>
     </message>
@@ -110,9 +115,9 @@
         <translation>历史</translation>
     </message>
     <message>
-        <location filename="../providers.cpp" line="845"/>
-        <source>Mathematics</source>
-        <translation>数学</translation>
+        <location filename="../providers.cpp" line="846"/>
+        <source>Copy calculation result to clipboard</source>
+        <translation>复制计算结果到剪切板</translation>
     </message>
 </context>
 </TS>

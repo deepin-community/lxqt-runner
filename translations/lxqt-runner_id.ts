@@ -49,7 +49,12 @@
         <translation> item</translation>
     </message>
     <message>
-        <location filename="../configuredialog/configuredialog.ui" line="90"/>
+        <location filename="../configuredialog/configuredialog.ui" line="80"/>
+        <source>Clear input on launching</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configuredialog/configuredialog.ui" line="97"/>
         <source>Shortcut:</source>
         <translation>Pintasan:</translation>
     </message>
@@ -97,7 +102,7 @@
         <translation>Bersihkan Riwayat</translation>
     </message>
     <message>
-        <location filename="../dialog.cpp" line="370"/>
+        <location filename="../dialog.cpp" line="408"/>
         <source>Show/hide runner dialog</source>
         <translation>Tampilkan/sembunyikan dialog runner</translation>
     </message>
@@ -110,9 +115,9 @@
         <translation>Riwayat</translation>
     </message>
     <message>
-        <location filename="../providers.cpp" line="845"/>
-        <source>Mathematics</source>
-        <translation>Matematika</translation>
+        <location filename="../providers.cpp" line="846"/>
+        <source>Copy calculation result to clipboard</source>
+        <translation>Salin hasil perhitungan ke clipboard</translation>
     </message>
 </context>
 </TS>

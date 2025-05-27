@@ -26,12 +26,12 @@
     <message>
         <location filename="../configuredialog/configuredialog.ui" line="46"/>
         <source>Show history first</source>
-        <translation>最初に履歴を表示する</translation>
+        <translation>履歴を最初に表示する</translation>
     </message>
     <message>
         <location filename="../configuredialog/configuredialog.ui" line="53"/>
         <source>Store/show history</source>
-        <translation>履歴の保管/表示をする</translation>
+        <translation>履歴を記録/表示する</translation>
     </message>
     <message>
         <location filename="../configuredialog/configuredialog.ui" line="60"/>
@@ -41,15 +41,20 @@
     <message>
         <location filename="../configuredialog/configuredialog.ui" line="63"/>
         <source>Show list with:</source>
-        <translation>リストの表示:</translation>
+        <translation>表示するリスト:</translation>
     </message>
     <message>
         <location filename="../configuredialog/configuredialog.ui" line="70"/>
         <source> item(s)</source>
-        <translation> 項目</translation>
+        <translation> 個のアイテム</translation>
     </message>
     <message>
-        <location filename="../configuredialog/configuredialog.ui" line="90"/>
+        <location filename="../configuredialog/configuredialog.ui" line="80"/>
+        <source>Clear input on launching</source>
+        <translation>起動時に入力をクリアする</translation>
+    </message>
+    <message>
+        <location filename="../configuredialog/configuredialog.ui" line="97"/>
         <source>Shortcut:</source>
         <translation>ショートカット:</translation>
     </message>
@@ -84,7 +89,7 @@
     <message>
         <location filename="../dialog.ui" line="26"/>
         <source>Application launcher </source>
-        <translation>アプリケーションランチャ </translation>
+        <translation>アプリケーションランチャー </translation>
     </message>
     <message>
         <location filename="../dialog.cpp" line="105"/>
@@ -97,9 +102,9 @@
         <translation>履歴の消去</translation>
     </message>
     <message>
-        <location filename="../dialog.cpp" line="370"/>
+        <location filename="../dialog.cpp" line="408"/>
         <source>Show/hide runner dialog</source>
-        <translation>Runnner のダイアログを表示する/隠す</translation>
+        <translation>Runner ダイアログの表示/非表示</translation>
     </message>
 </context>
 <context>
@@ -110,9 +115,9 @@
         <translation>履歴</translation>
     </message>
     <message>
-        <location filename="../providers.cpp" line="845"/>
-        <source>Mathematics</source>
-        <translation>計算</translation>
+        <location filename="../providers.cpp" line="846"/>
+        <source>Copy calculation result to clipboard</source>
+        <translation>計算結果をクリップボードへコピーします</translation>
     </message>
 </context>
 </TS>

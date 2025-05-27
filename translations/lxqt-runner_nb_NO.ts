@@ -49,7 +49,12 @@
         <translation> element(er)</translation>
     </message>
     <message>
-        <location filename="../configuredialog/configuredialog.ui" line="90"/>
+        <location filename="../configuredialog/configuredialog.ui" line="80"/>
+        <source>Clear input on launching</source>
+        <translation type="unfinished">Tøm inndata ved start</translation>
+    </message>
+    <message>
+        <location filename="../configuredialog/configuredialog.ui" line="97"/>
         <source>Shortcut:</source>
         <translation>Tastatursnarevei:</translation>
     </message>
@@ -97,7 +102,7 @@
         <translation>Slett historikk</translation>
     </message>
     <message>
-        <location filename="../dialog.cpp" line="370"/>
+        <location filename="../dialog.cpp" line="408"/>
         <source>Show/hide runner dialog</source>
         <translation>Vis/skjul programstarter</translation>
     </message>
@@ -110,9 +115,9 @@
         <translation>Historikk</translation>
     </message>
     <message>
-        <location filename="../providers.cpp" line="845"/>
-        <source>Mathematics</source>
-        <translation>Mattematikk</translation>
+        <location filename="../providers.cpp" line="846"/>
+        <source>Copy calculation result to clipboard</source>
+        <translation>Kopier utregnet resultat til utklippstavlen</translation>
     </message>
 </context>
 </TS>

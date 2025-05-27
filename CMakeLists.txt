@@ -27,9 +27,9 @@ cmake_dependent_option(RUNNER_VBOX_HEADLESS
 # Minimum Versions
 set(KF5_MINIMUM_VERSION "5.36.0")
 set(LIBMENUCACHE_MINIMUM_VERSION "1.1.0")
-set(LXQT_MINIMUM_VERSION "0.16.0")
-set(LXQT_GLOBALKEYS_MINIMUM_VERSION "0.16.0")
-set(QT_MINIMUM_VERSION "5.12")
+set(LXQT_MINIMUM_VERSION "1.2.0")
+set(LXQT_GLOBALKEYS_MINIMUM_VERSION "1.2.0")
+set(QT_MINIMUM_VERSION "5.15.0")
 
 find_package(Qt5Widgets ${QT_MINIMUM_VERSION} REQUIRED)
 find_package(Qt5Xml ${QT_MINIMUM_VERSION} REQUIRED)
@@ -57,7 +57,7 @@ endif ()
 
 if (USE_MENU_CACHE)
     # optionally use libmenu-cache from lxde to generate the application menu
-    find_package(MenuCache "$(LIBMENUCACHE_MINIMUM_VERSION}" REQUIRED)
+    find_package(MenuCache "${LIBMENUCACHE_MINIMUM_VERSION}" REQUIRED)
 endif()
 
 if (RUNNER_MATH)
@@ -86,10 +86,6 @@ set(lxqt-runner_CPP_FILES
 set(lxqt-runner_UI_FILES
     dialog.ui
     configuredialog/configuredialog.ui
-)
-
-set(QRC_FILES
-
 )
 
 set(lxqt-runner_LIBRARIES

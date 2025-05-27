@@ -6,7 +6,7 @@
     <message>
         <location filename="../configuredialog/configuredialog.ui" line="14"/>
         <source>Runner Settings</source>
-        <translation>Futtató beállítások</translation>
+        <translation>Futtató beállításai</translation>
     </message>
     <message>
         <location filename="../configuredialog/configuredialog.ui" line="20"/>
@@ -26,7 +26,7 @@
     <message>
         <location filename="../configuredialog/configuredialog.ui" line="46"/>
         <source>Show history first</source>
-        <translation>Előzmények mutatása elsőként</translation>
+        <translation>Előzmények megjelenítése elsőként</translation>
     </message>
     <message>
         <location filename="../configuredialog/configuredialog.ui" line="53"/>
@@ -49,34 +49,39 @@
         <translation> elem</translation>
     </message>
     <message>
-        <location filename="../configuredialog/configuredialog.ui" line="90"/>
+        <location filename="../configuredialog/configuredialog.ui" line="80"/>
+        <source>Clear input on launching</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configuredialog/configuredialog.ui" line="97"/>
         <source>Shortcut:</source>
         <translation>Gyorsbillentyű:</translation>
     </message>
     <message>
         <location filename="../configuredialog/configuredialog.cpp" line="61"/>
         <source>Top edge of the screen</source>
-        <translation>Képernyő felső szélén</translation>
+        <translation>A képernyő felső szélén</translation>
     </message>
     <message>
         <location filename="../configuredialog/configuredialog.cpp" line="62"/>
         <source>Center of the screen</source>
-        <translation>Képernyő közepén</translation>
+        <translation>A képernyő közepén</translation>
     </message>
     <message>
         <location filename="../configuredialog/configuredialog.cpp" line="67"/>
         <source>Focused screen</source>
-        <translation type="unfinished">Mindig a használt képernyőn</translation>
+        <translation>A használt képernyőn</translation>
     </message>
     <message>
         <location filename="../configuredialog/configuredialog.cpp" line="71"/>
         <source>Always on screen %1</source>
-        <translation>Mindig a %1 képernyőn</translation>
+        <translation>Mindig a(z) %1. képernyőn</translation>
     </message>
     <message>
         <location filename="../configuredialog/configuredialog.cpp" line="80"/>
         <source>Reset</source>
-        <translation>Alapállapot</translation>
+        <translation>Visszaállítás</translation>
     </message>
 </context>
 <context>
@@ -97,9 +102,9 @@
         <translation>Előzmények törlése</translation>
     </message>
     <message>
-        <location filename="../dialog.cpp" line="370"/>
+        <location filename="../dialog.cpp" line="408"/>
         <source>Show/hide runner dialog</source>
-        <translation>Futtatóablak ki/be</translation>
+        <translation>Futtatóablak megjelenítése/elrejtése</translation>
     </message>
 </context>
 <context>
@@ -110,9 +115,9 @@
         <translation>Előzmények</translation>
     </message>
     <message>
-        <location filename="../providers.cpp" line="845"/>
-        <source>Mathematics</source>
-        <translation>Matematika</translation>
+        <location filename="../providers.cpp" line="846"/>
+        <source>Copy calculation result to clipboard</source>
+        <translation>Másolja a vágólapra a számolás eredményét</translation>
     </message>
 </context>
 </TS>

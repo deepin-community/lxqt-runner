@@ -41,17 +41,22 @@
     <message>
         <location filename="../configuredialog/configuredialog.ui" line="63"/>
         <source>Show list with:</source>
-        <translation>Показывать список с</translation>
+        <translation>Показывать список с:</translation>
     </message>
     <message>
         <location filename="../configuredialog/configuredialog.ui" line="70"/>
         <source> item(s)</source>
-        <translation> элементами</translation>
+        <translation> элемент(ами)</translation>
     </message>
     <message>
-        <location filename="../configuredialog/configuredialog.ui" line="90"/>
+        <location filename="../configuredialog/configuredialog.ui" line="80"/>
+        <source>Clear input on launching</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configuredialog/configuredialog.ui" line="97"/>
         <source>Shortcut:</source>
-        <translation>Сочетание клавиш:</translation>
+        <translation>Ярлык:</translation>
     </message>
     <message>
         <location filename="../configuredialog/configuredialog.cpp" line="61"/>
@@ -84,7 +89,7 @@
     <message>
         <location filename="../dialog.ui" line="26"/>
         <source>Application launcher </source>
-        <translation>Ускоритель запуска программ </translation>
+        <translation>Средство запуска приложений </translation>
     </message>
     <message>
         <location filename="../dialog.cpp" line="105"/>
@@ -97,7 +102,7 @@
         <translation>Очистить историю</translation>
     </message>
     <message>
-        <location filename="../dialog.cpp" line="370"/>
+        <location filename="../dialog.cpp" line="408"/>
         <source>Show/hide runner dialog</source>
         <translation>Показать/скрыть окно ускорителя</translation>
     </message>
@@ -107,12 +112,12 @@
     <message>
         <location filename="../providers.cpp" line="445"/>
         <source>History</source>
-        <translation>Из истории</translation>
+        <translation>История</translation>
     </message>
     <message>
-        <location filename="../providers.cpp" line="845"/>
-        <source>Mathematics</source>
-        <translation>Математика</translation>
+        <location filename="../providers.cpp" line="846"/>
+        <source>Copy calculation result to clipboard</source>
+        <translation>Копировать результат расчета в буфер обмена</translation>
     </message>
 </context>
 </TS>
