@@ -20,36 +20,51 @@
     </message>
     <message>
         <location filename="../configuredialog/configuredialog.ui" line="36"/>
+        <source>Top margin</source>
+        <translation>Goiko marjina</translation>
+    </message>
+    <message>
+        <location filename="../configuredialog/configuredialog.ui" line="43"/>
+        <source> px</source>
+        <translation> px</translation>
+    </message>
+    <message>
+        <location filename="../configuredialog/configuredialog.ui" line="50"/>
         <source>Show on:</source>
         <translation>Erakutsi hemen:</translation>
     </message>
     <message>
-        <location filename="../configuredialog/configuredialog.ui" line="46"/>
-        <source>Show history first</source>
-        <translation type="unfinished">Erakutsi lehenengo historia</translation>
-    </message>
-    <message>
-        <location filename="../configuredialog/configuredialog.ui" line="53"/>
-        <source>Store/show history</source>
-        <translation type="unfinished">Gorde/ikusi historia</translation>
-    </message>
-    <message>
         <location filename="../configuredialog/configuredialog.ui" line="60"/>
-        <source>&lt;b&gt;Note&lt;/b&gt;: The size of top-level widgets are constrained to 2/3 of the desktop&apos;s height and width.</source>
-        <translation type="unfinished">&lt;b&gt;Oharra&lt;/b&gt;: Goi mailako widgeten tamaina mahaigainaren altuera eta zabaleraren 2/3era mugatua dago.</translation>
+        <source>Show history first</source>
+        <translation>Erakutsi historia lehenik</translation>
     </message>
     <message>
-        <location filename="../configuredialog/configuredialog.ui" line="63"/>
+        <location filename="../configuredialog/configuredialog.ui" line="67"/>
+        <source>Store/show history</source>
+        <translation>Gorde/ikusi historia</translation>
+    </message>
+    <message>
+        <location filename="../configuredialog/configuredialog.ui" line="74"/>
+        <source>&lt;b&gt;Note&lt;/b&gt;: The size of top-level widgets are constrained to 2/3 of the desktop&apos;s height and width.</source>
+        <translation>&lt;b&gt;Oharra&lt;/b&gt;: Goi mailako widgeten tamaina mahaigainaren altuera eta zabaleraren 2/3era mugatua dago.</translation>
+    </message>
+    <message>
+        <location filename="../configuredialog/configuredialog.ui" line="77"/>
         <source>Show list with:</source>
         <translation>Erakutsi zerrenda honekin:</translation>
     </message>
     <message>
-        <location filename="../configuredialog/configuredialog.ui" line="70"/>
+        <location filename="../configuredialog/configuredialog.ui" line="84"/>
         <source> item(s)</source>
-        <translation type="unfinished"></translation>
+        <translation> elementua(k)</translation>
     </message>
     <message>
-        <location filename="../configuredialog/configuredialog.ui" line="90"/>
+        <location filename="../configuredialog/configuredialog.ui" line="94"/>
+        <source>Clear input on launching</source>
+        <translation>Garbitu sarrera abiarazteko</translation>
+    </message>
+    <message>
+        <location filename="../configuredialog/configuredialog.ui" line="111"/>
         <source>Shortcut:</source>
         <translation>Lasterbidea:</translation>
     </message>
@@ -66,12 +81,12 @@
     <message>
         <location filename="../configuredialog/configuredialog.cpp" line="67"/>
         <source>Focused screen</source>
-        <translation type="unfinished">Enfokatutako pantaila</translation>
+        <translation>Enfokatutako pantaila</translation>
     </message>
     <message>
         <location filename="../configuredialog/configuredialog.cpp" line="71"/>
         <source>Always on screen %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Beti %1 pantailan</translation>
     </message>
     <message>
         <location filename="../configuredialog/configuredialog.cpp" line="80"/>
@@ -87,19 +102,19 @@
         <translation>Aplikazio-abiarazlea </translation>
     </message>
     <message>
-        <location filename="../dialog.cpp" line="105"/>
+        <location filename="../dialog.cpp" line="109"/>
         <source>Configure</source>
         <translation>Konfiguratu</translation>
     </message>
     <message>
-        <location filename="../dialog.cpp" line="109"/>
+        <location filename="../dialog.cpp" line="113"/>
         <source>Clear History</source>
         <translation>Garbitu historia</translation>
     </message>
     <message>
-        <location filename="../dialog.cpp" line="370"/>
+        <location filename="../dialog.cpp" line="465"/>
         <source>Show/hide runner dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Erakutsi/ezkutatu krunner-en elkarrizketa-koadroa</translation>
     </message>
 </context>
 <context>
@@ -110,9 +125,9 @@
         <translation>Historia</translation>
     </message>
     <message>
-        <location filename="../providers.cpp" line="845"/>
-        <source>Mathematics</source>
-        <translation>Matematikak</translation>
+        <location filename="../providers.cpp" line="846"/>
+        <source>Copy calculation result to clipboard</source>
+        <translation>Kopiatu kalkuluaren emaitza arbelean</translation>
     </message>
 </context>
 </TS>

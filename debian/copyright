@@ -3,12 +3,15 @@ Upstream-Name: lxqt-runner
 Source: https://github.com/lxqt/lxqt-runner
 
 Files: *
-Copyright: 2012-2019 LXQt team
+Copyright: 2012-2023 LXQt team
            2010-2012 Razor team
 License: LGPL-2.1+
 
 Files: debian/*
 Copyright: 2014-2019 Alf Gaida <agaida@siduction.org>
+           2022      ChangZhuo Chen (陳昌倬) <czchen@debian.org>
+           2023-2025 Andrew Lee (李健秋) <ajqlee@debian.org>
+           2024-2025 Macy Lin <macy@debconf.org>
 License: LGPL-2.1+
 
 License: LGPL-2.1+

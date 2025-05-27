@@ -97,9 +97,9 @@ void CommandItemModel::clearHistory()
  ************************************************/
 bool CommandItemModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
-    QRegExp re(filterRegExp());
+    QRegularExpression re(filterRegularExpression());
 
-    if (re.isEmpty() && !mOnlyHistory)
+    if (re.pattern().isEmpty() && !mOnlyHistory)
         return false;
 
     const CommandProviderItem *item = mSourceModel->command(sourceRow);
@@ -141,21 +141,32 @@ bool CommandItemModel::lessThan(const QModelIndex &left, const QModelIndex &righ
     if (mOnlyHistory)
         return left.row() < right.row();
 
-    HistoryItem const * i_left = dynamic_cast<HistoryItem const *>(mSourceModel->command(left));
-    HistoryItem const * i_right = dynamic_cast<HistoryItem const *>(mSourceModel->command(right));
+    const auto leftItem = mSourceModel->command(left);
+    const auto righItem = mSourceModel->command(right);
+
+    HistoryItem const * i_left = dynamic_cast<HistoryItem const *>(leftItem);
+    HistoryItem const * i_right = dynamic_cast<HistoryItem const *>(righItem);
     if (nullptr != i_left && nullptr == i_right)
         return mShowHistoryFirst;
     if (nullptr == i_left && nullptr != i_right)
         return !mShowHistoryFirst;
     if (nullptr != i_left && nullptr != i_right)
     {
-        QRegExp re(filterRegExp());
+        QRegularExpression re(filterRegularExpression());
         //Note: -1 should not be returned if the item passed the filter previously
-        const int pos_left = re.indexIn(i_left->command());
-        const int pos_right = re.indexIn(i_right->command());
+        const int pos_left = i_left->command().indexOf(re);
+        const int pos_right = i_right->command().indexOf(re);
         Q_ASSERT(-1 != pos_left && -1 != pos_right);
         return pos_left < pos_right
             || (pos_left == pos_right && QSortFilterProxyModel::lessThan(left, right));
+    }
+
+    // compare visible names
+    if (leftItem != nullptr && righItem != nullptr)
+    {
+        int comp = leftItem->title().compare(righItem->title());
+        if (comp != 0)
+            return comp < 0;
     }
 
     return QSortFilterProxyModel::lessThan(left, right);
@@ -276,10 +287,10 @@ CommandSourceItemModel::CommandSourceItemModel(bool useHistory, QObject *parent)
     }
     settings.endArray();
 
-    for(const CommandProvider* provider : qAsConst(mProviders))
+    for(const CommandProvider* provider : std::as_const(mProviders))
     {
-        connect(provider, SIGNAL(changed()), this, SIGNAL(layoutChanged()));
-        connect(provider, SIGNAL(aboutToBeChanged()), this, SIGNAL(layoutAboutToBeChanged()));
+        connect(provider, &CommandProvider::changed,          this, [this] { emit layoutChanged(); } );
+        connect(provider, &CommandProvider::aboutToBeChanged, this, [this] { emit layoutAboutToBeChanged(); } );
     }
 
     rebuild();
@@ -302,7 +313,7 @@ CommandSourceItemModel::~CommandSourceItemModel()
 int CommandSourceItemModel::rowCount(const QModelIndex& /*parent*/) const
 {
     int ret=0;
-    for(const CommandProvider* provider : qAsConst(mProviders))
+    for(const CommandProvider* provider : std::as_const(mProviders))
         ret += provider->count();
 
     return ret;
@@ -431,7 +442,7 @@ const CommandProviderItem *CommandSourceItemModel::command(const QModelIndex &in
 void CommandSourceItemModel::setCommand(const QString& command)
 {
     mCustomCommandProvider->setCommand(command);
-    for (ExternalProvider* const externalProvider : qAsConst(mExternalProviders))
+    for (ExternalProvider* const externalProvider : std::as_const(mExternalProviders))
     {
         externalProvider->setSearchTerm(command);
     }
@@ -458,8 +469,8 @@ void CommandSourceItemModel::setUseHistory(bool useHistory)
         mHistoryProvider = new HistoryProvider;
         mProviders.append(mHistoryProvider);
         mCustomCommandProvider->setHistoryProvider(mHistoryProvider);
-        connect(mHistoryProvider, SIGNAL(changed()), this, SIGNAL(layoutChanged()));
-        connect(mHistoryProvider, SIGNAL(aboutToBeChanged()), this, SIGNAL(layoutAboutToBeChanged()));
+        connect(mHistoryProvider, &HistoryProvider::changed,          this, [this] { emit layoutChanged(); } );
+        connect(mHistoryProvider, &HistoryProvider::aboutToBeChanged, this, [this] { emit layoutAboutToBeChanged(); } );
     }
     endResetModel();
 }

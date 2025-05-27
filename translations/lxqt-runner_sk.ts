@@ -6,7 +6,7 @@
     <message>
         <location filename="../configuredialog/configuredialog.ui" line="14"/>
         <source>Runner Settings</source>
-        <translation>Nastavenia Runnera</translation>
+        <translation>Nastavenia Runneru</translation>
     </message>
     <message>
         <location filename="../configuredialog/configuredialog.ui" line="20"/>
@@ -16,40 +16,55 @@
     <message>
         <location filename="../configuredialog/configuredialog.ui" line="26"/>
         <source>Positioning:</source>
-        <translation>Umiestnenie:</translation>
+        <translation>Poloha:</translation>
     </message>
     <message>
         <location filename="../configuredialog/configuredialog.ui" line="36"/>
+        <source>Top margin</source>
+        <translation>Horný okraj</translation>
+    </message>
+    <message>
+        <location filename="../configuredialog/configuredialog.ui" line="43"/>
+        <source> px</source>
+        <translation> px</translation>
+    </message>
+    <message>
+        <location filename="../configuredialog/configuredialog.ui" line="50"/>
         <source>Show on:</source>
-        <translation>Zobrazovať na:</translation>
-    </message>
-    <message>
-        <location filename="../configuredialog/configuredialog.ui" line="46"/>
-        <source>Show history first</source>
-        <translation>Záznamy z histórie zobrazovať ako prvé</translation>
-    </message>
-    <message>
-        <location filename="../configuredialog/configuredialog.ui" line="53"/>
-        <source>Store/show history</source>
-        <translation>Ukladať/zobrazovať históriu</translation>
+        <translation>Kde zobrazovať:</translation>
     </message>
     <message>
         <location filename="../configuredialog/configuredialog.ui" line="60"/>
+        <source>Show history first</source>
+        <translation>Históriu zobrazovať na začiatku</translation>
+    </message>
+    <message>
+        <location filename="../configuredialog/configuredialog.ui" line="67"/>
+        <source>Store/show history</source>
+        <translation>Uložiť/zobraziť históriu</translation>
+    </message>
+    <message>
+        <location filename="../configuredialog/configuredialog.ui" line="74"/>
         <source>&lt;b&gt;Note&lt;/b&gt;: The size of top-level widgets are constrained to 2/3 of the desktop&apos;s height and width.</source>
-        <translation>&lt;b&gt;Pozor&lt;/b&gt;: Veľkosť widgetov najvyššej úrovne je obmedzená na 2/3 výšky a šírky plochy.</translation>
+        <translation>&lt;b&gt;Upozornenie:&lt;/b&gt; Veľkosť top-level widgetov je obmedzená na 2/3 výšky a šírky pracovnej plochy.</translation>
     </message>
     <message>
-        <location filename="../configuredialog/configuredialog.ui" line="63"/>
+        <location filename="../configuredialog/configuredialog.ui" line="77"/>
         <source>Show list with:</source>
-        <translation>Zobraziť zoznam s:</translation>
+        <translation>Počet položiek v zozname:</translation>
     </message>
     <message>
-        <location filename="../configuredialog/configuredialog.ui" line="70"/>
+        <location filename="../configuredialog/configuredialog.ui" line="84"/>
         <source> item(s)</source>
-        <translation> položkami</translation>
+        <translation> položky</translation>
     </message>
     <message>
-        <location filename="../configuredialog/configuredialog.ui" line="90"/>
+        <location filename="../configuredialog/configuredialog.ui" line="94"/>
+        <source>Clear input on launching</source>
+        <translation>Vymazať vstup pri spustení</translation>
+    </message>
+    <message>
+        <location filename="../configuredialog/configuredialog.ui" line="111"/>
         <source>Shortcut:</source>
         <translation>Klávesová skratka:</translation>
     </message>
@@ -76,7 +91,7 @@
     <message>
         <location filename="../configuredialog/configuredialog.cpp" line="80"/>
         <source>Reset</source>
-        <translation>Vrátiť zmeny</translation>
+        <translation>Zrušiť zmeny</translation>
     </message>
 </context>
 <context>
@@ -87,19 +102,19 @@
         <translation>Spúšťač aplikácií </translation>
     </message>
     <message>
-        <location filename="../dialog.cpp" line="105"/>
+        <location filename="../dialog.cpp" line="109"/>
         <source>Configure</source>
-        <translation>Nastavenia</translation>
+        <translation>Nastaviť</translation>
     </message>
     <message>
-        <location filename="../dialog.cpp" line="109"/>
+        <location filename="../dialog.cpp" line="113"/>
         <source>Clear History</source>
         <translation>Vymazať históriu</translation>
     </message>
     <message>
-        <location filename="../dialog.cpp" line="370"/>
+        <location filename="../dialog.cpp" line="465"/>
         <source>Show/hide runner dialog</source>
-        <translation>Zobraziť/skryť Runner</translation>
+        <translation>Zobraziť/skryť okno Runneru</translation>
     </message>
 </context>
 <context>
@@ -110,9 +125,9 @@
         <translation>História</translation>
     </message>
     <message>
-        <location filename="../providers.cpp" line="845"/>
-        <source>Mathematics</source>
-        <translation>Matematika</translation>
+        <location filename="../providers.cpp" line="846"/>
+        <source>Copy calculation result to clipboard</source>
+        <translation>Skopírovať výsledok výpočtu do schránky</translation>
     </message>
 </context>
 </TS>

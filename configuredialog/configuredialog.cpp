@@ -40,7 +40,7 @@
 #include <QPushButton>
 #include <QCloseEvent>
 #include <QAction>
-
+#include <QScreen>
 
 
 /************************************************
@@ -55,12 +55,12 @@ ConfigureDialog::ConfigureDialog(QSettings *settings, const QString &defaultShor
 {
     ui->setupUi(this);
 
-    connect(ui->buttonBox->button(QDialogButtonBox::Reset), SIGNAL(clicked()), this, SLOT(resetSettings()));
+    connect(ui->buttonBox->button(QDialogButtonBox::Reset), &QPushButton::clicked, this, &ConfigureDialog::resetSettings);
 
     // Position .................................
     ui->positionCbx->addItem(tr("Top edge of the screen"), QVariant(ConfigureDialog::PositionTop));
     ui->positionCbx->addItem(tr("Center of the screen"), QVariant(ConfigureDialog::PositionCenter));
-    connect(ui->positionCbx, SIGNAL(currentIndexChanged(int)), this, SLOT(positionCbxChanged(int)));
+    connect(ui->positionCbx,  qOverload<int>(&QComboBox::currentIndexChanged), this, &ConfigureDialog::positionCbxChanged);
 
     // Monitor ..................................
 
@@ -71,19 +71,21 @@ ConfigureDialog::ConfigureDialog(QSettings *settings, const QString &defaultShor
         ui->monitorCbx->addItem(tr("Always on screen %1").arg(i + 1), QVariant(i));
 
     ui->monitorCbx->setEnabled(monCnt > 1);
-    connect(ui->monitorCbx, SIGNAL(currentIndexChanged(int)), this, SLOT(monitorCbxChanged(int)));
+    connect(ui->monitorCbx, qOverload<int>(&QComboBox::currentIndexChanged), this, &ConfigureDialog::monitorCbxChanged);
 
 
     // Shortcut .................................
-    connect(ui->shortcutEd, SIGNAL(shortcutGrabbed(QString)), this, SLOT(shortcutChanged(QString)));
+    connect(ui->shortcutEd, &ShortcutSelector::shortcutGrabbed, this, &ConfigureDialog::shortcutChanged);
 
-    connect(ui->shortcutEd->addMenuAction(tr("Reset")), SIGNAL(triggered()), this, SLOT(shortcutReset()));
+    connect(ui->shortcutEd->addMenuAction(tr("Reset")), &QAction::triggered, this, &ConfigureDialog::shortcutReset);
 
     settingsChanged();
 
-    connect(ui->historyUseCb, &QAbstractButton::toggled, [this] (bool checked) { mSettings->setValue(QL1S("dialog/history_use"), checked); });
-    connect(ui->historyFirstCb, &QAbstractButton::toggled, [this] (bool checked) { mSettings->setValue(QL1S("dialog/history_first"), checked); });
-    connect(ui->listShownItemsSB, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), [this] (int i) { mSettings->setValue(QL1S("dialog/list_shown_items"), i); });
+    connect(ui->historyUseCb, &QAbstractButton::toggled, this, [this] (bool checked) { mSettings->setValue(QL1S("dialog/history_use"), checked); });
+    connect(ui->historyFirstCb, &QAbstractButton::toggled, this, [this] (bool checked) { mSettings->setValue(QL1S("dialog/history_first"), checked); });
+    connect(ui->clearCb, &QAbstractButton::toggled, this, [this] (bool checked) { mSettings->setValue(QL1S("dialog/clear_on_running"), checked); });
+    connect(ui->marginSB, &QAbstractSpinBox::editingFinished, this, [this] { mSettings->setValue(QL1S("dialog/top_margin"), ui->marginSB->value()); });
+    connect(ui->listShownItemsSB, &QAbstractSpinBox::editingFinished, this, [this] { mSettings->setValue(QL1S("dialog/list_shown_items"), ui->listShownItemsSB->value()); });
 }
 
 
@@ -93,9 +95,19 @@ ConfigureDialog::ConfigureDialog(QSettings *settings, const QString &defaultShor
 void ConfigureDialog::settingsChanged()
 {
     if (mSettings->value(QL1S("dialog/show_on_top"), true).toBool())
+    {
         ui->positionCbx->setCurrentIndex(0);
+        ui->marginSB->setEnabled(true);
+    }
     else
+    {
         ui->positionCbx->setCurrentIndex(1);
+        ui->marginSB->setEnabled(false);
+    }
+
+    if (QScreen *s = QApplication::primaryScreen())
+        ui->marginSB->setMaximum(s->availableGeometry().height());
+    ui->marginSB->setValue(mSettings->value(QL1S("dialog/top_margin"), 0).toInt());
 
     ui->monitorCbx->setCurrentIndex(mSettings->value(QL1S("dialog/monitor"), -1).toInt() + 1);
     ui->shortcutEd->setText(mSettings->value(QL1S("dialog/shortcut"), QL1S("Alt+F2")).toString());
@@ -103,6 +115,7 @@ void ConfigureDialog::settingsChanged()
     ui->historyUseCb->setChecked(history_use);
     ui->historyFirstCb->setChecked(mSettings->value(QL1S("dialog/history_first"), true).toBool());
     ui->historyFirstCb->setEnabled(history_use);
+    ui->clearCb->setChecked(mSettings->value(QL1S("dialog/clear_on_running"), true).toBool());
     ui->listShownItemsSB->setValue(mSettings->value(QL1S("dialog/list_shown_items"), 4).toInt());
 }
 
@@ -142,6 +155,7 @@ void ConfigureDialog::shortcutReset()
 void ConfigureDialog::positionCbxChanged(int index)
 {
     mSettings->setValue(QL1S("dialog/show_on_top"), index == 0);
+    ui->marginSB->setEnabled(index == 0);
 }
 
 

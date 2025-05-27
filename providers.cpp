@@ -266,9 +266,9 @@ bool AppLinkItem::run() const
 /************************************************
 
  ************************************************/
-bool AppLinkItem::compare(const QRegExp &regExp) const
+bool AppLinkItem::compare(const QRegularExpression &regExp) const
 {
-    if (regExp.isEmpty())
+    if (regExp.pattern().isEmpty())
         return false;
 
     return mProgram.contains(regExp)
@@ -283,7 +283,7 @@ bool AppLinkItem::compare(const QRegExp &regExp) const
  ************************************************/
 void AppLinkItem::initExec()
 {
-    static const QRegExp split_re{QSL("\\s")};
+    static const QRegularExpression split_re{QSL("\\s")};
     XdgDesktopFile desktop;
     if (desktop.load(mDesktopFile))
     {
@@ -310,7 +310,7 @@ AppLinkProvider::AppLinkProvider():
 #else
     mXdgMenu = new XdgMenu();
     mXdgMenu->setEnvironments(QStringList() << QSL("X-LXQT") << QSL("LXQt"));
-    connect(mXdgMenu, SIGNAL(changed()), this, SLOT(update()));
+    connect(mXdgMenu, &XdgMenu::changed, this, &AppLinkProvider::update);
     mXdgMenu->read(XdgMenu::getMenuFileName());
     update();
 #endif
@@ -459,7 +459,7 @@ bool HistoryItem::run() const
 /************************************************
 
  ************************************************/
-bool HistoryItem::compare(const QRegExp &regExp) const
+bool HistoryItem::compare(const QRegularExpression &regExp) const
 {
     return mCommand.contains(regExp);
 }
@@ -584,7 +584,7 @@ bool CustomCommandItem::run() const
 /************************************************
 
  ************************************************/
-bool CustomCommandItem::compare(const QRegExp & /*regExp*/) const
+bool CustomCommandItem::compare(const QRegularExpression & /*regExp*/) const
 {
     return !mComment.isEmpty();
 }
@@ -636,9 +636,9 @@ bool VirtualBoxItem::run() const
 
 }
 
-bool VirtualBoxItem::compare(const QRegExp &regExp) const
+bool VirtualBoxItem::compare(const QRegularExpression &regExp) const
 {
-    return (! regExp.isEmpty() && -1 != regExp.indexIn (title ()));
+    return (!regExp.pattern().isEmpty() && -1 != title().indexOf(regExp));
 }
 
 unsigned int VirtualBoxItem::rank(const QString &pattern) const
@@ -707,7 +707,7 @@ VirtualBoxProvider::VirtualBoxProvider():
         {"Ubuntu_64",       ":/vbox-icons/os_ubuntu_64.png"},
         {"Xandros",         ":/vbox-icons/os_xandros.png"},
         {"Xandros_64",      ":/vbox-icons/os_xandros_64.png"},
-        {"Linux",           ":/vbox-icons/os_linux_other.png"},
+        {"Linux",           ":/vbox-icons/os_linux.png"},
         {"FreeBSD",         ":/vbox-icons/os_freebsd.png"},
         {"FreeBSD_64",      ":/vbox-icons/os_freebsd_64.png"},
         {"OpenBSD",         ":/vbox-icons/os_openbsd.png"},
@@ -716,8 +716,8 @@ VirtualBoxProvider::VirtualBoxProvider():
         {"NetBSD_64",       ":/vbox-icons/os_netbsd_64.png"},
         {"Solaris",         ":/vbox-icons/os_solaris.png"},
         {"Solaris_64",      ":/vbox-icons/os_solaris_64.png"},
-        {"OpenSolaris",     ":/vbox-icons/os_opensolaris.png"},
-        {"OpenSolaris_64",  ":/vbox-icons/os_opensolaris_64.png"},
+        {"OpenSolaris",     ":/vbox-icons/os_oraclesolaris.png"},
+        {"OpenSolaris_64",  ":/vbox-icons/os_oraclesolaris_64.png"},
         {"QNX",             ":/vbox-icons/os_qnx.png"},
     };
 
@@ -792,6 +792,7 @@ bool VirtualBoxProvider::isOutDated() const
 
 #ifdef MATH_ENABLED
 #include <muParser.h>
+#include <QClipboard>
 
 class MathItem::Parser : private mu::Parser
 {
@@ -842,7 +843,7 @@ MathItem::MathItem():
         CommandProviderItem(),
         mParser{new Parser}
 {
-    mToolTip =QObject::tr("Mathematics");
+    mToolTip = QObject::tr("Copy calculation result to clipboard");
     mIcon = QIcon::fromTheme(QSL("accessories-calculator"));
 }
 
@@ -860,6 +861,12 @@ MathItem::~MathItem()
  ************************************************/
 bool MathItem::run() const
 {
+    int posResult = mTitle.indexOf(QL1C('='));
+    if (posResult > -1 && posResult < mTitle.size() - 1)
+    {
+        QApplication::clipboard()->setText(mTitle.mid(posResult + 1));
+        return true;
+    }
     return false;
 }
 
@@ -867,7 +874,7 @@ bool MathItem::run() const
 /************************************************
 
  ************************************************/
-bool MathItem::compare(const QRegExp &regExp) const
+bool MathItem::compare(const QRegularExpression &regExp) const
 {
     QString s = regExp.pattern().trimmed();
 
@@ -968,10 +975,9 @@ CommandProvider(), mName(name)
 {
     mExternalProcess = new QProcess(this);
     mYamlParser = new YamlParser();
-    connect(mYamlParser, SIGNAL(newListOfMaps(QList<QMap<QString, QString> >)),
-            this,        SLOT(newListOfMaps(QList<QMap<QString, QString> >)));
+    connect(mYamlParser, &YamlParser::newListOfMaps, this, &ExternalProvider::newListOfMaps);
 
-    connect(mExternalProcess, SIGNAL(readyRead()), this, SLOT(readFromProcess()));
+    connect(mExternalProcess, &QProcess::readyRead, this, &ExternalProvider::readFromProcess);
     mExternalProcess->start(externalProgram, QStringList());
 }
 
@@ -989,7 +995,7 @@ void ExternalProvider::newListOfMaps(QList<QMap<QString,QString> > maps)
     qDeleteAll(*this);
     clear();
 
-    for(auto map : qAsConst(maps))
+    for(auto map : std::as_const(maps))
     {
         ExternalProviderItem *item  = new ExternalProviderItem();
         if (item->setData(map))

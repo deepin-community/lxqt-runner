@@ -20,38 +20,53 @@
     </message>
     <message>
         <location filename="../configuredialog/configuredialog.ui" line="36"/>
+        <source>Top margin</source>
+        <translation>Верхний отступ</translation>
+    </message>
+    <message>
+        <location filename="../configuredialog/configuredialog.ui" line="43"/>
+        <source> px</source>
+        <translation> пикс</translation>
+    </message>
+    <message>
+        <location filename="../configuredialog/configuredialog.ui" line="50"/>
         <source>Show on:</source>
         <translation>Показывать на:</translation>
     </message>
     <message>
-        <location filename="../configuredialog/configuredialog.ui" line="46"/>
+        <location filename="../configuredialog/configuredialog.ui" line="60"/>
         <source>Show history first</source>
         <translation>Сначала показать историю</translation>
     </message>
     <message>
-        <location filename="../configuredialog/configuredialog.ui" line="53"/>
+        <location filename="../configuredialog/configuredialog.ui" line="67"/>
         <source>Store/show history</source>
         <translation>Хранить и показывать историю</translation>
     </message>
     <message>
-        <location filename="../configuredialog/configuredialog.ui" line="60"/>
+        <location filename="../configuredialog/configuredialog.ui" line="74"/>
         <source>&lt;b&gt;Note&lt;/b&gt;: The size of top-level widgets are constrained to 2/3 of the desktop&apos;s height and width.</source>
         <translation>&lt;b&gt;Внимание&lt;/b&gt;: Размер виджетов верхнего уровня ограничен 2/3 высоты и ширины рабочего стола.</translation>
     </message>
     <message>
-        <location filename="../configuredialog/configuredialog.ui" line="63"/>
+        <location filename="../configuredialog/configuredialog.ui" line="77"/>
         <source>Show list with:</source>
-        <translation>Показывать список с</translation>
+        <translation>Показывать список с:</translation>
     </message>
     <message>
-        <location filename="../configuredialog/configuredialog.ui" line="70"/>
+        <location filename="../configuredialog/configuredialog.ui" line="84"/>
         <source> item(s)</source>
-        <translation> элементами</translation>
+        <translation> элемент(ами)</translation>
     </message>
     <message>
-        <location filename="../configuredialog/configuredialog.ui" line="90"/>
+        <location filename="../configuredialog/configuredialog.ui" line="94"/>
+        <source>Clear input on launching</source>
+        <translation>Очищать поле при запуске</translation>
+    </message>
+    <message>
+        <location filename="../configuredialog/configuredialog.ui" line="111"/>
         <source>Shortcut:</source>
-        <translation>Сочетание клавиш:</translation>
+        <translation>Ярлык:</translation>
     </message>
     <message>
         <location filename="../configuredialog/configuredialog.cpp" line="61"/>
@@ -84,20 +99,20 @@
     <message>
         <location filename="../dialog.ui" line="26"/>
         <source>Application launcher </source>
-        <translation>Ускоритель запуска программ </translation>
+        <translation>Средство запуска приложений </translation>
     </message>
     <message>
-        <location filename="../dialog.cpp" line="105"/>
+        <location filename="../dialog.cpp" line="109"/>
         <source>Configure</source>
         <translation>Настроить</translation>
     </message>
     <message>
-        <location filename="../dialog.cpp" line="109"/>
+        <location filename="../dialog.cpp" line="113"/>
         <source>Clear History</source>
         <translation>Очистить историю</translation>
     </message>
     <message>
-        <location filename="../dialog.cpp" line="370"/>
+        <location filename="../dialog.cpp" line="465"/>
         <source>Show/hide runner dialog</source>
         <translation>Показать/скрыть окно ускорителя</translation>
     </message>
@@ -107,12 +122,12 @@
     <message>
         <location filename="../providers.cpp" line="445"/>
         <source>History</source>
-        <translation>Из истории</translation>
+        <translation>История</translation>
     </message>
     <message>
-        <location filename="../providers.cpp" line="845"/>
-        <source>Mathematics</source>
-        <translation>Математика</translation>
+        <location filename="../providers.cpp" line="846"/>
+        <source>Copy calculation result to clipboard</source>
+        <translation>Копировать результат расчета в буфер обмена</translation>
     </message>
 </context>
 </TS>
