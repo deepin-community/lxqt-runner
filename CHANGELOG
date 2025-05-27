@@ -1,3 +1,60 @@
+lxqt-runner-2.1.2 / 2025-01-29
+===============================
+ * Fixed a regression that broke case-insensitive filtering in some cases.
+
+lxqt-runner-2.1.1 / 2025-01-11
+===============================
+ * Suppressed new Qt warnings for invalid QRegularExpression.
+ * Fixed a new crash on closing Runner on Wayland.
+ * Updated man page.
+
+lxqt-runner-2.1.0 / 2024-11-05
+===============================
+ * Updated `README.md`.
+ * Added layershell runtime dependency.
+ * Fixed multi-screen setups with Wayland.
+ * Set the layer shell scope to "launcher".
+
+lxqt-runner-2.0.0 / 2024-04-17
+===============================
+ * Hide window on deactivation under Wayland.
+ * Ported to Qt6 and added full Wayland support by using layer shell.
+
+lxqt-runner-1.4.0 / 2023-11-05
+===============================
+ * An option is added for the top margin.
+ * Ported deprecated KWindowSystem methods.
+
+lxqt-runner-1.3.0 / 2023-04-15
+===============================
+ * Updated VirtualBox icons for license compatibility.
+ * Made the window frameless explicitly (for Wayland).
+
+lxqt-runner-1.2.0 / 2022-11-05
+===============================
+ * Force the correct position on the window after it is moved from outside the app.
+ * Added an option for clearing the entry on launching apps.
+
+lxqt-runner-1.1.0 / 2022-04-15
+===============================
+ * Prevented redundant writings of dialog width to config file.
+ * Updated `README.md`.
+
+lxqt-runner-1.0.0 / 2021-11-04
+===============================
+ * Updated AUTHORS.
+ * Fixed compilation with menu-cache.
+ * Bumped minimum required Qt version to 5.15.
+ * Use visible names as the last criterion for sorting items.
+
+lxqt-runner-0.17.0 / 2021-04-15
+===============================
+  * Prevent selection jumps in the dropdown list.
+  * Activated `Home` and `End` in the dropdown list.
+  * Copy the calculation result to clipboard.
+  * Completely moved to Qt5 signal/slot syntax.
+  * Select the calculation result on showing lxqt-runner.
+
 lxqt-runner-0.16.0 / 2020-11-01
 ===============================
   * Don't use QProcess deprecates methods.

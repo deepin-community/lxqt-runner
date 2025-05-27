@@ -54,7 +54,11 @@
 #include <QScreen>
 #include <QScrollBar>
 
-#include <KWindowSystem/KWindowSystem>
+#include <KWindowSystem>
+#include <KX11Extras>
+
+#include <LayerShellQt/Shell>
+#include <LayerShellQt/Window>
 
 #define DEFAULT_SHORTCUT "Alt+F2"
 
@@ -62,7 +66,7 @@
 
  ************************************************/
 Dialog::Dialog(QWidget *parent) :
-    QDialog(parent, Qt::Dialog | Qt::WindowStaysOnTopHint | Qt::CustomizeWindowHint),
+    QDialog(parent, Qt::Dialog | Qt::WindowStaysOnTopHint | Qt::CustomizeWindowHint | Qt::FramelessWindowHint),
     ui(new Ui::Dialog),
     mSettings(new LXQt::Settings(QSL("lxqt-runner"), this)),
     mGlobalShortcut(0),
@@ -74,19 +78,19 @@ Dialog::Dialog(QWidget *parent) :
     setWindowTitle(QSL("LXQt Runner"));
     setAttribute(Qt::WA_TranslucentBackground);
 
-    connect(LXQt::Settings::globalSettings(), SIGNAL(iconThemeChanged()), this, SLOT(update()));
-    connect(ui->closeButton, SIGNAL(clicked()), this, SLOT(hide()));
-    connect(mSettings, SIGNAL(settingsChanged()), this, SLOT(applySettings()));
+    connect(LXQt::Settings::globalSettings(), &LXQt::GlobalSettings::iconThemeChanged, this, qOverload<>(&Dialog::update));
+    connect(ui->closeButton, &QToolButton::clicked, this, &Dialog::hide);
+    connect(mSettings, &LXQt::Settings::settingsChanged, this, &Dialog::applySettings);
 
     mSearchTimer.setSingleShot(true);
     connect(&mSearchTimer, &QTimer::timeout, ui->commandEd, [this] {
         setFilter(ui->commandEd->text());
     });
-    mSearchTimer.setInterval(350); // typing speed (not very fast)
+    mSearchTimer.setInterval(250); // typing speed (not very fast)
 
     ui->commandEd->installEventFilter(this);
 
-    connect(ui->commandEd, &QLineEdit::textChanged, [this] (QString const &) {
+    connect(ui->commandEd, &QLineEdit::textChanged, this, [this] (QString const &) {
         mSearchTimer.start();
     });
     connect(ui->commandEd, &QLineEdit::returnPressed, this, &Dialog::runCommand);
@@ -95,7 +99,7 @@ Dialog::Dialog(QWidget *parent) :
     ui->commandList->installEventFilter(this);
     ui->commandList->setModel(mCommandItemModel);
     ui->commandList->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    connect(ui->commandList, SIGNAL(clicked(QModelIndex)), this, SLOT(runCommand()));
+    connect(ui->commandList, &MyListView::clicked, this, &Dialog::runCommand);
     setFilter(QString());
     dataChanged();
 
@@ -124,17 +128,18 @@ Dialog::Dialog(QWidget *parent) :
 
     applySettings();
 
-    // screen updates
-    connect(qApp, &QApplication::screenAdded, this, &Dialog::realign);
-    connect(qApp, &QApplication::screenRemoved, this, &Dialog::realign);
-    const auto primaryScreen = QGuiApplication::primaryScreen();
-    if (primaryScreen != nullptr)
-        connect(primaryScreen, &QScreen::availableGeometryChanged, this, &Dialog::realign);
+    if (QGuiApplication::platformName() == QSL("xcb"))
+    {
+        // screen updates
+        connect(qApp, &QApplication::screenAdded, this, &Dialog::realign);
+        connect(qApp, &QApplication::screenRemoved, this, &Dialog::realign);
+        const auto primaryScreen = QGuiApplication::primaryScreen();
+        if (primaryScreen != nullptr)
+            connect(primaryScreen, &QScreen::availableGeometryChanged, this, &Dialog::realign);
+    }
 
     connect(mGlobalShortcut, &GlobalKeyShortcut::Action::activated, this, &Dialog::showHide);
     connect(mGlobalShortcut, &GlobalKeyShortcut::Action::shortcutChanged, this, &Dialog::shortcutChanged);
-    connect(KWindowSystem::self(), &KWindowSystem::activeWindowChanged, this, &Dialog::onActiveWindowChanged);
-    connect(KWindowSystem::self(), &KWindowSystem::currentDesktopChanged, this, &Dialog::onCurrentDesktopChanged);
 
     resize(mSettings->value(QL1S("dialog/width"), 400).toInt(), size().height());
 
@@ -176,9 +181,97 @@ QSize Dialog::sizeHint() const
 /************************************************
 
  ************************************************/
-void Dialog::resizeEvent(QResizeEvent * /*event*/)
+void Dialog::resizeEvent(QResizeEvent *event)
 {
-    mSettings->setValue(QL1S("dialog/width"), size().width());
+    if (event->spontaneous())
+        mSettings->setValue(QL1S("dialog/width"), size().width());
+}
+
+
+/************************************************
+
+ ************************************************/
+void Dialog::moveEvent(QMoveEvent *event)
+{
+    if (QGuiApplication::platformName() == QSL("xcb"))
+    {
+        // NOTE: For some reason, the dialog may get repositioned under X11 by "outer world"
+        // (VM?) to wrong position (0,0). The root cause of this is yet unknown, and this is
+        // a workaround to avoid a wong position for the window.
+        if (event->spontaneous())
+            QTimer::singleShot(0, this, &Dialog::realign);
+    }
+    return QDialog::moveEvent(event);
+}
+
+
+/************************************************
+
+ ************************************************/
+void Dialog::showEvent(QShowEvent *event)
+{
+    if (QGuiApplication::platformName() == QSL("wayland"))
+    {
+        winId();
+        if (QWindow *win = windowHandle())
+        {
+            if (LayerShellQt::Window* layershell = LayerShellQt::Window::get(win))
+            {
+                layershell->setLayer(LayerShellQt::Window::Layer::LayerTop);
+                layershell->setKeyboardInteractivity(LayerShellQt::Window::KeyboardInteractivityOnDemand);
+                LayerShellQt::Window::Anchors anchors = {LayerShellQt::Window::AnchorTop};
+                layershell->setScope(QStringLiteral("launcher"));
+                layershell->setAnchors(anchors);
+
+                QScreen *screen = nullptr;
+                const auto screens = QGuiApplication::screens();
+                if (mMonitor >= 0 && mMonitor < screens.size())
+                    screen = screens.at(mMonitor);
+                if (screen)
+                {
+                    win->setScreen(screen);
+                    layershell->setScreenConfiguration(LayerShellQt::Window::ScreenConfiguration::ScreenFromQWindow);
+                }
+                else
+                { // the screen is not set by us; leave it to the compositor
+                    layershell->setScreenConfiguration(LayerShellQt::Window::ScreenConfiguration::ScreenFromCompositor);
+                    // get the screen that the compositor chooses
+                    screen = windowHandle()->screen();
+                }
+
+                if (mShowOnTop)
+                {
+                    layershell->setMargins(QMargins(0, mTopMargin, 0, 0));
+                }
+                else if (screen)
+                {
+                    QRect desktop = screen->availableGeometry();
+                    int topMargin = desktop.center().y() - ui->panel->sizeHint().height();
+                    layershell->setMargins(QMargins(0, topMargin, 0, 0));
+                }
+            }
+        }
+    }
+    else
+    {
+        connect(KX11Extras::self(), &KX11Extras::activeWindowChanged, this, &Dialog::onActiveWindowChanged);
+        connect(KX11Extras::self(), &KX11Extras::currentDesktopChanged, this, &Dialog::onCurrentDesktopChanged);
+    }
+    QDialog::showEvent(event);
+}
+
+
+/************************************************
+
+ ************************************************/
+void Dialog::hideEvent(QHideEvent *event)
+{
+    QDialog::hideEvent(event);
+    if (QGuiApplication::platformName() == QSL("xcb"))
+    {
+        disconnect(KX11Extras::self(), &KX11Extras::currentDesktopChanged, this, &Dialog::onCurrentDesktopChanged);
+        disconnect(KX11Extras::self(), &KX11Extras::activeWindowChanged, this, &Dialog::onActiveWindowChanged);
+    }
 }
 
 
@@ -209,6 +302,14 @@ bool Dialog::editKeyPressEvent(QKeyEvent *event)
 {
     switch (event->key())
     {
+    case Qt::Key_Escape:
+        if (QGuiApplication::platformName() == QSL("wayland"))
+        {
+            hide(); // if the dialog is closed, the shell properties will not be effective the next time
+            return true;
+        }
+        break;
+
     case Qt::Key_N:
         if (event->modifiers().testFlag(Qt::ControlModifier))
         {
@@ -229,6 +330,7 @@ bool Dialog::editKeyPressEvent(QKeyEvent *event)
 
     case Qt::Key_Up:
     case Qt::Key_PageUp:
+    case Qt::Key_Home:
         if (ui->commandEd->text().isEmpty() &&
             ui->commandList->isVisible() &&
             ui->commandList->currentIndex().row() == 0
@@ -242,6 +344,7 @@ bool Dialog::editKeyPressEvent(QKeyEvent *event)
 
     case Qt::Key_Down:
     case Qt::Key_PageDown:
+    case Qt::Key_End:
         if (ui->commandEd->text().isEmpty() &&
             ui->commandList->isHidden()
            )
@@ -309,9 +412,14 @@ bool Dialog::listKeyPressEvent(QKeyEvent *event)
  ************************************************/
 void Dialog::showHide()
 {
+    if (QGuiApplication::platformName() != QSL("xcb"))
+    {
+        return;
+    }
+
     // Using KWindowSystem to detect the active window since
     // QWidget::isActiveWindow is not working reliably.
-    if (isVisible() && (KWindowSystem::activeWindow() == winId()))
+    if (isVisible() && (KX11Extras::activeWindow() == winId()))
     {
         hide();
     }
@@ -319,8 +427,9 @@ void Dialog::showHide()
     {
         realign();
         show();
-        KWindowSystem::forceActiveWindow(winId());
+        KX11Extras::forceActiveWindow(winId());
         ui->commandEd->setFocus();
+        ui->commandEd->selectAll();
     }
 }
 
@@ -328,6 +437,7 @@ void Dialog::showHide()
 /************************************************
 
  ************************************************/
+ // Called only on X11.
 void Dialog::realign()
 {
     QRect desktop;
@@ -339,13 +449,13 @@ void Dialog::realign()
         screenNumber = screen ? screens.indexOf(screen) : 0;
     }
 
-    desktop = screens.at(screenNumber)->availableGeometry().intersected(KWindowSystem::workArea(screenNumber));
+    desktop = screens.at(screenNumber)->availableGeometry().intersected(KX11Extras::workArea(screenNumber));
 
     QRect rect = this->geometry();
     rect.moveCenter(desktop.center());
 
     if (mShowOnTop)
-        rect.moveTop(desktop.top());
+        rect.moveTop(desktop.top() + qMin(mTopMargin, desktop.height() - ui->panel->sizeHint().height()));
     else
         rect.moveTop(desktop.center().y() - ui->panel->sizeHint().height());
 
@@ -372,6 +482,9 @@ void Dialog::applySettings()
         mGlobalShortcut->changeShortcut(shortcut);
 
     mShowOnTop = mSettings->value(QL1S("dialog/show_on_top"), true).toBool();
+    mTopMargin = qMax(mSettings->value(QL1S("dialog/top_margin"), 0).toInt(), 0);
+
+    mClearOnRunning = mSettings->value(QL1S("dialog/clear_on_running"), true).toBool();
 
     mMonitor = mSettings->value(QL1S("dialog/monitor"), -1).toInt();
 
@@ -379,7 +492,6 @@ void Dialog::applySettings()
     mCommandItemModel->showHistoryFirst(mSettings->value(QL1S("dialog/history_first"), true).toBool());
     ui->commandList->setShownCount(mSettings->value(QL1S("dialog/list_shown_items"), 4).toInt());
 
-    realign();
     mSettings->sync();
 }
 
@@ -404,6 +516,7 @@ void Dialog::shortcutChanged(const QString &/*oldShortcut*/, const QString &newS
 /************************************************
 
  ************************************************/
+// Called only on X11.
 void Dialog::onActiveWindowChanged(WId id)
 {
     if (isVisible() && 0 != id && id != winId())
@@ -411,7 +524,7 @@ void Dialog::onActiveWindowChanged(WId id)
         if (mDesktopChanged)
         {
             mDesktopChanged = false;
-            KWindowSystem::forceActiveWindow(winId());
+            KX11Extras::forceActiveWindow(winId());
         } else
         {
             hide();
@@ -423,12 +536,13 @@ void Dialog::onActiveWindowChanged(WId id)
 /************************************************
 
  ************************************************/
+// Called only on X11.
 void Dialog::onCurrentDesktopChanged(int screen)
 {
     if (isVisible())
     {
-        KWindowSystem::setOnDesktop(winId(), screen);
-        KWindowSystem::forceActiveWindow(winId());
+        KX11Extras::setOnDesktop(winId(), screen);
+        KX11Extras::forceActiveWindow(winId());
         //Note: workaround for changing desktop while runner is shown
         // The KWindowSystem::forceActiveWindow may fail to correctly activate runner if there
         // are any other windows on the new desktop (probably because of the sequence while WM
@@ -449,7 +563,8 @@ void Dialog::setFilter(const QString &text, bool onlyHistory)
     QString trimmedText = text.simplified();
     mCommandItemModel->setCommand(trimmedText);
     mCommandItemModel->showOnlyHistory(onlyHistory);
-    mCommandItemModel->setFilterRegExp(trimmedText);
+    QRegularExpression regExp(trimmedText, QRegularExpression::CaseInsensitiveOption);
+    mCommandItemModel->setFilterRegularExpression(regExp.isValid() ? regExp : QRegularExpression());
     mCommandItemModel->invalidate();
 
     // tidy up layout and select first item
@@ -464,7 +579,10 @@ void Dialog::dataChanged()
 {
     if (mCommandItemModel->rowCount())
     {
-       ui->commandList->setCurrentIndex(mCommandItemModel->appropriateItem(mCommandItemModel->command()));
+        // set the current item if not existing
+        if(!ui->commandList->currentIndex().isValid())
+            ui->commandList->setCurrentIndex(mCommandItemModel->appropriateItem(mCommandItemModel->command()));
+        // show the list if it's hidden and scroll to the current item
         ui->commandList->scrollTo(ui->commandList->currentIndex());
         ui->commandList->show();
     }
@@ -492,7 +610,11 @@ void Dialog::runCommand()
     if (res)
     {
         hide();
-        ui->commandEd->clear();
+        if (mClearOnRunning
+            && !qobject_cast<const MathItem*>(command)) // don't clear math results
+        {
+            ui->commandEd->clear();
+        }
     }
 
 }
@@ -506,6 +628,21 @@ void Dialog::showConfigDialog()
     if (!mConfigureDialog)
         mConfigureDialog = new ConfigureDialog(mSettings, QL1S(DEFAULT_SHORTCUT), this);
     mConfigureDialog->exec();
+}
+
+
+/************************************************
+
+ ************************************************/
+bool Dialog::event(QEvent *event)
+{
+    // On Wayland, the workaround related to mDesktopChanged does not make sense because
+    // we cannot activate any window. So, we just hide the window on deactivation.
+    if (event->type() == QEvent::WindowDeactivate && QGuiApplication::platformName() != QSL("xcb"))
+    {
+        hide();
+    }
+    return QDialog::event(event);
 }
 
 #undef DEFAULT_SHORTCUT

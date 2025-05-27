@@ -31,7 +31,7 @@
 #define PROVIDERS_H
 
 #include <QList>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QDomElement>
 #include <QString>
 #include <QIcon>
@@ -48,12 +48,13 @@
 class CommandProviderItem: public QObject
 {
     Q_OBJECT
+
 public:
     CommandProviderItem(): QObject() {}
     virtual ~CommandProviderItem() {}
 
     virtual bool run() const = 0;
-    virtual bool compare(const QRegExp &regExp) const = 0;
+    virtual bool compare(const QRegularExpression &regExp) const = 0;
 
     /// Returns the item's icon.
     QIcon icon() const { return mIcon; }
@@ -91,6 +92,7 @@ protected:
 class CommandProvider: public QObject, public QList<CommandProviderItem*>
 {
     Q_OBJECT
+
 public:
     CommandProvider();
     virtual ~CommandProvider();
@@ -111,6 +113,7 @@ signals:
 class AppLinkItem: public CommandProviderItem
 {
     Q_OBJECT
+
 public:
     AppLinkItem(const QDomElement &element);
 
@@ -119,7 +122,7 @@ public:
 #endif
 
     bool run() const;
-    bool compare(const QRegExp &regExp) const;
+    bool compare(const QRegularExpression &regExp) const;
     QString command() const { return mCommand; }
     QString exec() const { return mExec; }
 
@@ -143,6 +146,7 @@ class XdgMenu;
 class AppLinkProvider: public CommandProvider
 {
     Q_OBJECT
+
 public:
     AppLinkProvider();
     virtual ~AppLinkProvider();
@@ -167,11 +171,13 @@ private:
 
 class HistoryItem: public CommandProviderItem
 {
+    Q_OBJECT
+
 public:
     HistoryItem(const QString &command);
 
     bool run() const;
-    bool compare(const QRegExp &regExp) const;
+    bool compare(const QRegularExpression &regExp) const;
 
     QString command() const { return mCommand; }
     virtual unsigned int rank(const QString &pattern) const;
@@ -185,6 +191,8 @@ private:
 class QSettings;
 class HistoryProvider: public CommandProvider
 {
+    Q_OBJECT
+
 public:
     HistoryProvider();
     virtual ~HistoryProvider();
@@ -211,7 +219,7 @@ public:
     CustomCommandItem(CustomCommandProvider *provider);
 
     bool run() const;
-    bool compare(const QRegExp &regExp) const;
+    bool compare(const QRegularExpression &regExp) const;
 
     QString command() const { return mCommand; }
     void setCommand(const QString &command);
@@ -229,6 +237,8 @@ private:
 class QSettings;
 class CustomCommandProvider: public CommandProvider
 {
+    Q_OBJECT
+
 public:
     CustomCommandProvider();
 
@@ -251,6 +261,8 @@ private:
  ************************************************/
 class MathItem: public CommandProviderItem
 {
+    Q_OBJECT
+
 public:
     class Parser;
 public:
@@ -258,7 +270,7 @@ public:
     ~MathItem();
 
     bool run() const;
-    bool compare(const QRegExp &regExp) const;
+    bool compare(const QRegularExpression &regExp) const;
     virtual unsigned int rank(const QString &pattern) const;
 private:
     QScopedPointer<Parser> mParser;
@@ -269,6 +281,8 @@ private:
 
 class MathProvider: public CommandProvider
 {
+    Q_OBJECT
+
 public:
     MathProvider();
     //virtual ~MathProvider();
@@ -283,12 +297,14 @@ public:
 
 class VirtualBoxItem: public CommandProviderItem
 {
+    Q_OBJECT
+
 public:
   VirtualBoxItem(const QString & MachineName , const QIcon & Icon);
 
   void setRDEPort (const QString & portNum);
   bool run() const;
-  bool compare(const QRegExp &regExp) const;
+  bool compare(const QRegularExpression &regExp) const;
   virtual unsigned int rank(const QString &pattern) const;
 private:
   QString m_rdePortNum;
@@ -296,6 +312,8 @@ private:
 
 class VirtualBoxProvider: public CommandProvider
 {
+    Q_OBJECT
+
 public:
   VirtualBoxProvider ();
   void rebuild();
@@ -319,7 +337,7 @@ public:
     bool setData(QMap<QString, QString> & data);
 
     bool run() const;
-    bool compare(const QRegExp & /*regExp*/) const {return true;} // We leave the decision to the external process
+    bool compare(const QRegularExpression & /*regExp*/) const {return true;} // We leave the decision to the external process
     unsigned int rank(const QString &pattern) const;
 
     QString mCommand;

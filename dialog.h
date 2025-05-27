@@ -64,9 +64,13 @@ public:
 protected:
     void closeEvent(QCloseEvent *event);
     void resizeEvent(QResizeEvent *event);
+    void moveEvent(QMoveEvent *event);
+    void showEvent(QShowEvent *event);
+    void hideEvent(QHideEvent *event);
     bool eventFilter(QObject *object, QEvent *event);
     bool editKeyPressEvent(QKeyEvent *event);
     bool listKeyPressEvent(QKeyEvent *event);
+    bool event(QEvent *event);
 
 private:
     Ui::Dialog *ui;
@@ -74,6 +78,8 @@ private:
     GlobalKeyShortcut::Action *mGlobalShortcut;
     CommandItemModel *mCommandItemModel;
     bool mShowOnTop;
+    int mTopMargin;
+    bool mClearOnRunning;
     int mMonitor;
     LXQt::PowerManager *mPowerManager;
     LXQt::ScreenSaver *mScreenSaver;

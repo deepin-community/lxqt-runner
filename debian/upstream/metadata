@@ -1,7 +1,5 @@
-Name: lxqt-runner
 Bug-Database: https://github.com/lxqt/lxqt-runner/issues
 Bug-Submit: https://github.com/lxqt/lxqt-runner/issues/new
 Changelog: https://github.com/lxqt/lxqt-runner/blob/master/CHANGELOG
-Repository: https://github.com/lxqt/lxqt-runner
-Repository-Browser: https://github.com/lxqt/lxqt-runner
-
+Repository: https://github.com/lxqt/lxqt-runner.git
+Repository-Browse: https://github.com/lxqt/lxqt-runner
